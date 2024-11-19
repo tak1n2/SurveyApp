@@ -1,0 +1,8 @@
+# Ignore Visual Studio files
+.vs/
+*.sqlite
+*.suo
+*.user
+*.log
+bin/
+obj/
