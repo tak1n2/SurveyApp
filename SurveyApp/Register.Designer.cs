@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RegistratrionForm));
             btnRgstr = new Button();
             textBox1 = new TextBox();
             textBox2 = new TextBox();
@@ -110,6 +111,8 @@
             Controls.Add(textBox1);
             Controls.Add(btnRgstr);
             Font = new Font("Segoe UI", 14F);
+            FormBorderStyle = FormBorderStyle.FixedDialog;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Margin = new Padding(5);
             Name = "RegistratrionForm";
             StartPosition = FormStartPosition.CenterScreen;
