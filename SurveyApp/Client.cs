@@ -9,7 +9,7 @@ namespace Client
 {
     public class Client
     {
-        public event Action<string>? OnLog;
+        public event EventHandler<MessageReceivedEventArgs> MessageReceived;
         private TcpClient? _tcpClient;
 
         public async Task ConnectAsync(string ipAddress, int port)
@@ -18,12 +18,12 @@ namespace Client
             {
                 _tcpClient = new TcpClient();
                 await _tcpClient.ConnectAsync(ipAddress, port);
-                Log($"Connected to server at {ipAddress}:{port}");
+                OnMessageReceived(new MessageReceivedEventArgs($"Connected to server at {ipAddress}:{port}"));
                 _ = Task.Run(ReceiveMessagesAsync);
             }
             catch (Exception ex)
             {
-                Log($"Error connecting to server: {ex.Message}");
+                OnMessageReceived(new MessageReceivedEventArgs($"Error connecting to server: {ex.Message}"));
             }
         }
 
@@ -36,12 +36,12 @@ namespace Client
                     var stream = _tcpClient.GetStream();
                     var buffer = Encoding.UTF8.GetBytes(message);
                     await stream.WriteAsync(buffer, 0, buffer.Length);
-                    Log($"Message sent: {message}");
+                    OnMessageReceived(new MessageReceivedEventArgs($"Message sent: {message}"));
                 }
             }
             catch (Exception ex)
             {
-                Log($"Error sending message: {ex.Message}");
+                OnMessageReceived(new MessageReceivedEventArgs($"Error sending message: {ex.Message}"));
             }
         }
 
@@ -58,19 +58,32 @@ namespace Client
                     if (bytesRead == 0) break;
 
                     var message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-                    Log($"Message received: {message}");
+                    OnMessageReceived(new MessageReceivedEventArgs($"Message received: {message}"));
                 }
             }
             catch (Exception ex)
             {
-                Log($"Error receiving messages: {ex.Message}");
+                OnMessageReceived(new MessageReceivedEventArgs($"Error receiving messages: {ex.Message}"));
             }
         }
 
-        private void Log(string message)
+        public virtual void OnMessageReceived(MessageReceivedEventArgs e)
         {
-            OnLog?.Invoke(message);
+            MessageReceived?.Invoke(this, e);
         }
+
+
+        public class MessageReceivedEventArgs : EventArgs
+        {
+            public string Message { get; }
+
+            public MessageReceivedEventArgs(string message)
+            {
+                Message = message;
+            }
+        }
+
+
     }
 }
 
