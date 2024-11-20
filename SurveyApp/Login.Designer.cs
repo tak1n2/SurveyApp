@@ -28,48 +28,48 @@
         /// </summary>
         private void InitializeComponent()
         {
-            textBox1 = new TextBox();
-            textBox2 = new TextBox();
-            btnRgstr = new Button();
+            tbLogin = new TextBox();
+            tbPasswrod = new TextBox();
+            btnLogin = new Button();
             linkLabel1 = new LinkLabel();
             SuspendLayout();
             // 
-            // textBox1
+            // tbLogin
             // 
-            textBox1.BackColor = Color.Snow;
-            textBox1.Cursor = Cursors.Hand;
-            textBox1.Font = new Font("Segoe UI", 24F);
-            textBox1.ForeColor = SystemColors.InactiveCaptionText;
-            textBox1.Location = new Point(68, 33);
-            textBox1.Name = "textBox1";
-            textBox1.PlaceholderText = "Login";
-            textBox1.Size = new Size(632, 50);
-            textBox1.TabIndex = 2;
+            tbLogin.BackColor = Color.Snow;
+            tbLogin.Cursor = Cursors.Hand;
+            tbLogin.Font = new Font("Segoe UI", 24F);
+            tbLogin.ForeColor = SystemColors.InactiveCaptionText;
+            tbLogin.Location = new Point(68, 33);
+            tbLogin.Name = "tbLogin";
+            tbLogin.PlaceholderText = "Login";
+            tbLogin.Size = new Size(632, 50);
+            tbLogin.TabIndex = 2;
             // 
-            // textBox2
+            // tbPasswrod
             // 
-            textBox2.BackColor = Color.Snow;
-            textBox2.Cursor = Cursors.Hand;
-            textBox2.Font = new Font("Segoe UI", 24F);
-            textBox2.ForeColor = SystemColors.InactiveCaptionText;
-            textBox2.Location = new Point(68, 100);
-            textBox2.Name = "textBox2";
-            textBox2.PlaceholderText = "Password";
-            textBox2.Size = new Size(632, 50);
-            textBox2.TabIndex = 3;
+            tbPasswrod.BackColor = Color.Snow;
+            tbPasswrod.Cursor = Cursors.Hand;
+            tbPasswrod.Font = new Font("Segoe UI", 24F);
+            tbPasswrod.ForeColor = SystemColors.InactiveCaptionText;
+            tbPasswrod.Location = new Point(68, 100);
+            tbPasswrod.Name = "tbPasswrod";
+            tbPasswrod.PlaceholderText = "Password";
+            tbPasswrod.Size = new Size(632, 50);
+            tbPasswrod.TabIndex = 3;
             // 
-            // btnRgstr
+            // btnLogin
             // 
-            btnRgstr.Cursor = Cursors.Hand;
-            btnRgstr.Font = new Font("Trebuchet MS", 20F);
-            btnRgstr.Location = new Point(242, 168);
-            btnRgstr.Margin = new Padding(5);
-            btnRgstr.Name = "btnRgstr";
-            btnRgstr.Size = new Size(275, 62);
-            btnRgstr.TabIndex = 4;
-            btnRgstr.Text = "Login";
-            btnRgstr.UseVisualStyleBackColor = true;
-            btnRgstr.Click += btnRgstr_Click;
+            btnLogin.Cursor = Cursors.Hand;
+            btnLogin.Font = new Font("Trebuchet MS", 20F);
+            btnLogin.Location = new Point(242, 168);
+            btnLogin.Margin = new Padding(5);
+            btnLogin.Name = "btnLogin";
+            btnLogin.Size = new Size(275, 62);
+            btnLogin.TabIndex = 4;
+            btnLogin.Text = "Login";
+            btnLogin.UseVisualStyleBackColor = true;
+            btnLogin.Click += btnRgstr_Click;
             // 
             // linkLabel1
             // 
@@ -90,11 +90,12 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(0, 0, 64);
-            ClientSize = new Size(800, 285);
+            ClientSize = new Size(779, 285);
             Controls.Add(linkLabel1);
-            Controls.Add(btnRgstr);
-            Controls.Add(textBox2);
-            Controls.Add(textBox1);
+            Controls.Add(btnLogin);
+            Controls.Add(tbPasswrod);
+            Controls.Add(tbLogin);
+            FormBorderStyle = FormBorderStyle.FixedDialog;
             Name = "Login";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Login";
@@ -104,9 +105,9 @@
 
         #endregion
 
-        private TextBox textBox1;
-        private TextBox textBox2;
-        private Button btnRgstr;
+        private TextBox tbLogin;
+        private TextBox tbPasswrod;
+        private Button btnLogin;
         private LinkLabel linkLabel1;
     }
 }
