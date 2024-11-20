@@ -110,6 +110,7 @@
             Controls.Add(textBox1);
             Controls.Add(btnRgstr);
             Font = new Font("Segoe UI", 14F);
+            FormBorderStyle = FormBorderStyle.FixedDialog;
             Margin = new Padding(5);
             Name = "RegistratrionForm";
             StartPosition = FormStartPosition.CenterScreen;
