@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Login));
             tbLogin = new TextBox();
             tbPasswrod = new TextBox();
             btnLogin = new Button();
@@ -96,6 +97,7 @@
             Controls.Add(tbPasswrod);
             Controls.Add(tbLogin);
             FormBorderStyle = FormBorderStyle.FixedDialog;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "Login";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Login";
