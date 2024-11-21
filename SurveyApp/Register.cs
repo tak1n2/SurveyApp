@@ -11,10 +11,6 @@ namespace SurveyApp
             InitializeComponent();
             tcpClient = new Client();
             this.Load += RegistratrionForm_Load!;
-            //tcpClient.MessageReceived += (sender, e) =>
-            //{
-
-            //};
         }
 
         private async Task InitializeClientAsync()
@@ -35,9 +31,9 @@ namespace SurveyApp
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             var loginForm = new Login(tcpClient);
-            this.Hide(); // Hide the Registration form
-            loginForm.ShowDialog(); // Open Login form modally
-            this.Close(); // Close Registration form after Login form is closed
+            this.Hide(); 
+            loginForm.ShowDialog(); 
+            this.Close();
 
         }
 

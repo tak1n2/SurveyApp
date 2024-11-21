@@ -26,9 +26,9 @@ namespace SurveyApp
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             var registrationForm = new RegistratrionForm();
-            this.Hide(); // Hiding Login form
-            registrationForm.ShowDialog(); // Open Registration Form
-            this.Close();// Closing this form
+            this.Hide(); 
+            registrationForm.ShowDialog(); 
+            this.Close();
         }
 
         private async Task SendLoginRequest(string username, string password)

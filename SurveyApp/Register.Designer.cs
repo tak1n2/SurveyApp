@@ -69,6 +69,7 @@
             tbPsw.ForeColor = SystemColors.InactiveCaptionText;
             tbPsw.Location = new Point(76, 108);
             tbPsw.Name = "tbPsw";
+            tbPsw.PasswordChar = '*';
             tbPsw.PlaceholderText = "Password";
             tbPsw.Size = new Size(632, 50);
             tbPsw.TabIndex = 2;
@@ -95,6 +96,7 @@
             tbPswConfirm.ForeColor = SystemColors.InactiveCaptionText;
             tbPswConfirm.Location = new Point(76, 173);
             tbPswConfirm.Name = "tbPswConfirm";
+            tbPswConfirm.PasswordChar = '*';
             tbPswConfirm.PlaceholderText = "Confirm password";
             tbPswConfirm.Size = new Size(632, 50);
             tbPswConfirm.TabIndex = 4;
