@@ -55,6 +55,7 @@
             tbPasswrod.ForeColor = SystemColors.InactiveCaptionText;
             tbPasswrod.Location = new Point(68, 100);
             tbPasswrod.Name = "tbPasswrod";
+            tbPasswrod.PasswordChar = '*';
             tbPasswrod.PlaceholderText = "Password";
             tbPasswrod.Size = new Size(632, 50);
             tbPasswrod.TabIndex = 3;
