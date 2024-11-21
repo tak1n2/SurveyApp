@@ -9,7 +9,7 @@ namespace ClientForApp
 {
     public class Client
     {
-        public event EventHandler<MessageReceivedEventArgs> MessageReceived;
+        public event EventHandler<MessageReceivedEventArgs>? MessageReceived;
         private TcpClient? _tcpClient;
 
         public async Task ConnectAsync(string ipAddress, int port)
@@ -19,7 +19,6 @@ namespace ClientForApp
                 _tcpClient = new TcpClient();
                 await _tcpClient.ConnectAsync(ipAddress, port);
                 OnMessageReceived(new MessageReceivedEventArgs($"Connected to server at {ipAddress}:{port}"));
-                _ = Task.Run(ReceiveMessagesAsync);
             }
             catch (Exception ex)
             {
@@ -45,25 +44,26 @@ namespace ClientForApp
             }
         }
 
-        private async Task ReceiveMessagesAsync()
+        public async Task<string?> ReceiveMessageAsync()
         {
-            var stream = _tcpClient!.GetStream();
+            var stream = _tcpClient?.GetStream();
+            if (stream == null) throw new InvalidOperationException("TCP client is not connected.");
+
             var buffer = new byte[1024];
 
             try
             {
-                while (_tcpClient.Connected)
-                {
-                    int bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length);
-                    if (bytesRead == 0) break;
+                int bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length);
+                if (bytesRead == 0) return null; 
 
-                    var message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-                    OnMessageReceived(new MessageReceivedEventArgs($"Message received: {message}"));
-                }
+                var message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
+
+                return message;
             }
             catch (Exception ex)
             {
-                OnMessageReceived(new MessageReceivedEventArgs($"Error receiving messages: {ex.Message}"));
+                OnMessageReceived(new MessageReceivedEventArgs($"Error receiving message: {ex.Message}"));
+                return null;
             }
         }
 

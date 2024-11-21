@@ -16,31 +16,13 @@ namespace SurveyApp
     public partial class Login : Form
     {
         private readonly Client tcpClient;
-        public Login()
+        public Login(Client client)
         {
             InitializeComponent();
-            tcpClient = new Client();
-            InitializeClientAsync();
-            tcpClient.MessageReceived += (sender, e) =>
-            {
-                tbLogin.Text = e.Message;
-            };
-            
+            tcpClient = client;
         }
 
-        private async Task InitializeClientAsync()
-        {
-            try
-            {
-                var ip = "224.5.5.5";
-                var port = 5678;
-                await tcpClient.ConnectAsync(ip, port);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error);
-            }
-        }
+       
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             var registrationForm = new RegistratrionForm();
@@ -49,12 +31,30 @@ namespace SurveyApp
             this.Close();// Closing this form
         }
 
-        private void btnRgstr_Click(object sender, EventArgs e)
+        private async Task SendLoginRequest(string username, string password)
         {
-            var appForm = new App();
-            this.Hide();
-            appForm.ShowDialog();
-            this.Close();
+            var msg = $"LOGIN {username} {password}";
+            await tcpClient.SendMessageAsync(msg);
+        }
+
+        private async void btnRgstr_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                await SendLoginRequest(tbLogin.Text,tbPasswrod.Text);
+                var msg = await tcpClient.ReceiveMessageAsync();
+                if (msg == "LOGIN_SUCCESS")
+                {
+                    var appForm = new App(tcpClient);
+                    this.Hide();
+                    appForm.ShowDialog();
+                    this.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Credentials are invalid", "Error", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error);
+            }
         }
     }
 }

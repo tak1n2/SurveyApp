@@ -30,10 +30,10 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RegistratrionForm));
             btnRgstr = new Button();
-            textBox1 = new TextBox();
-            textBox2 = new TextBox();
+            tbLogin = new TextBox();
+            tbPsw = new TextBox();
             linkLabel1 = new LinkLabel();
-            textBox3 = new TextBox();
+            tbPswConfirm = new TextBox();
             SuspendLayout();
             // 
             // btnRgstr
@@ -49,29 +49,29 @@
             btnRgstr.UseVisualStyleBackColor = true;
             btnRgstr.Click += btnRgstr_Click;
             // 
-            // textBox1
+            // tbLogin
             // 
-            textBox1.BackColor = Color.Snow;
-            textBox1.Cursor = Cursors.Hand;
-            textBox1.Font = new Font("Segoe UI", 24F);
-            textBox1.ForeColor = SystemColors.InactiveCaptionText;
-            textBox1.Location = new Point(76, 42);
-            textBox1.Name = "textBox1";
-            textBox1.PlaceholderText = "Login";
-            textBox1.Size = new Size(632, 50);
-            textBox1.TabIndex = 1;
+            tbLogin.BackColor = Color.Snow;
+            tbLogin.Cursor = Cursors.Hand;
+            tbLogin.Font = new Font("Segoe UI", 24F);
+            tbLogin.ForeColor = SystemColors.InactiveCaptionText;
+            tbLogin.Location = new Point(76, 42);
+            tbLogin.Name = "tbLogin";
+            tbLogin.PlaceholderText = "Login";
+            tbLogin.Size = new Size(632, 50);
+            tbLogin.TabIndex = 1;
             // 
-            // textBox2
+            // tbPsw
             // 
-            textBox2.BackColor = Color.Snow;
-            textBox2.Cursor = Cursors.Hand;
-            textBox2.Font = new Font("Segoe UI", 24F);
-            textBox2.ForeColor = SystemColors.InactiveCaptionText;
-            textBox2.Location = new Point(76, 108);
-            textBox2.Name = "textBox2";
-            textBox2.PlaceholderText = "Password";
-            textBox2.Size = new Size(632, 50);
-            textBox2.TabIndex = 2;
+            tbPsw.BackColor = Color.Snow;
+            tbPsw.Cursor = Cursors.Hand;
+            tbPsw.Font = new Font("Segoe UI", 24F);
+            tbPsw.ForeColor = SystemColors.InactiveCaptionText;
+            tbPsw.Location = new Point(76, 108);
+            tbPsw.Name = "tbPsw";
+            tbPsw.PlaceholderText = "Password";
+            tbPsw.Size = new Size(632, 50);
+            tbPsw.TabIndex = 2;
             // 
             // linkLabel1
             // 
@@ -87,17 +87,17 @@
             linkLabel1.Text = "Already have an account?";
             linkLabel1.LinkClicked += linkLabel1_LinkClicked;
             // 
-            // textBox3
+            // tbPswConfirm
             // 
-            textBox3.BackColor = Color.Snow;
-            textBox3.Cursor = Cursors.Hand;
-            textBox3.Font = new Font("Segoe UI", 24F);
-            textBox3.ForeColor = SystemColors.InactiveCaptionText;
-            textBox3.Location = new Point(76, 173);
-            textBox3.Name = "textBox3";
-            textBox3.PlaceholderText = "Confirm password";
-            textBox3.Size = new Size(632, 50);
-            textBox3.TabIndex = 4;
+            tbPswConfirm.BackColor = Color.Snow;
+            tbPswConfirm.Cursor = Cursors.Hand;
+            tbPswConfirm.Font = new Font("Segoe UI", 24F);
+            tbPswConfirm.ForeColor = SystemColors.InactiveCaptionText;
+            tbPswConfirm.Location = new Point(76, 173);
+            tbPswConfirm.Name = "tbPswConfirm";
+            tbPswConfirm.PlaceholderText = "Confirm password";
+            tbPswConfirm.Size = new Size(632, 50);
+            tbPswConfirm.TabIndex = 4;
             // 
             // RegistratrionForm
             // 
@@ -105,10 +105,10 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(0, 0, 64);
             ClientSize = new Size(805, 361);
-            Controls.Add(textBox3);
+            Controls.Add(tbPswConfirm);
             Controls.Add(linkLabel1);
-            Controls.Add(textBox2);
-            Controls.Add(textBox1);
+            Controls.Add(tbPsw);
+            Controls.Add(tbLogin);
             Controls.Add(btnRgstr);
             Font = new Font("Segoe UI", 14F);
             FormBorderStyle = FormBorderStyle.FixedDialog;
@@ -117,6 +117,7 @@
             Name = "RegistratrionForm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Registration";
+            Load += RegistratrionForm_Load;
             ResumeLayout(false);
             PerformLayout();
         }
@@ -124,9 +125,9 @@
         #endregion
 
         private Button btnRgstr;
-        private TextBox textBox1;
-        private TextBox textBox2;
+        private TextBox tbLogin;
+        private TextBox tbPsw;
         private LinkLabel linkLabel1;
-        private TextBox textBox3;
+        private TextBox tbPswConfirm;
     }
 }
