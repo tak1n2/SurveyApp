@@ -116,6 +116,7 @@
             FormBorderStyle = FormBorderStyle.FixedDialog;
             Icon = (Icon)resources.GetObject("$this.Icon");
             Margin = new Padding(5);
+            MaximizeBox = false;
             Name = "RegistratrionForm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Registration";

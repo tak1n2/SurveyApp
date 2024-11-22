@@ -48,11 +48,18 @@ namespace SurveyApp
 
             try
             {
-                if (tbPsw.Text == tbPswConfirm.Text)
+
+                if (!IsPasswordValid(tbPsw.Text))
                 {
-                    await SendRegisetrRequest(tbLogin.Text, tbPsw.Text);
+                    throw new Exception("Password must be at least 5 characters long and include a number, an uppercase letter");                
                 }
 
+                if(!(tbPsw.Text == tbPswConfirm.Text))
+                {
+                    throw new Exception("Passwords don't match");
+                }
+
+                await SendRegisetrRequest(tbLogin.Text, tbPsw.Text);
                 var msg = await tcpClient.ReceiveMessageAsync();
 
                 if (msg == "REGISTER_SUCCESS")
@@ -64,7 +71,7 @@ namespace SurveyApp
                 }
                 else
                 {
-                    MessageBox.Show("Login has already taken or credentials are invalid", "Error", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error);
+                    throw new Exception("Login has already taken or credentials are invalid");
                 }
             }
             catch (Exception ex)
@@ -78,5 +85,32 @@ namespace SurveyApp
         {
             await InitializeClientAsync();
         }
+
+      
+        private bool IsPasswordValid(string password)
+        {
+        
+            const int MinLength = 5;
+
+            
+            if (password.Length < MinLength) return false;
+
+            
+            if (!password.Any(char.IsDigit)) return false;
+
+            
+            if (!password.Any(char.IsUpper)) return false;
+
+   
+            return true;
+        }
+
+
+
+
+
+
+
+
     }
 }

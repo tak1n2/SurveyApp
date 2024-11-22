@@ -41,6 +41,11 @@ namespace SurveyApp
         {
             try
             {
+                if(!IsPasswordValid( tbPasswrod.Text)) {
+                    throw new Exception("Password must be at least 5 characters long and include a number, an uppercase letter");
+
+                }
+
                 await SendLoginRequest(tbLogin.Text,tbPasswrod.Text);
                 var msg = await tcpClient.ReceiveMessageAsync();
                 if (msg == "LOGIN_SUCCESS")
@@ -50,11 +55,39 @@ namespace SurveyApp
                     appForm.ShowDialog();
                     this.Close();
                 }
+                else
+                {
+                    throw new Exception("Incorrect login or password");
+                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Credentials are invalid", "Error", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error);
             }
         }
+
+        private bool IsPasswordValid(string password)
+        {
+
+            const int MinLength = 5;
+
+
+            if (password.Length < MinLength) return false;
+
+
+            if (!password.Any(char.IsDigit)) return false;
+
+
+            if (!password.Any(char.IsUpper)) return false;
+
+
+            return true;
+        }
+
+
+
+
+
+
     }
 }
