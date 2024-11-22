@@ -28,40 +28,50 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(App));
             label1 = new Label();
-            tbTest = new TextBox();
+            linkLabel1 = new LinkLabel();
             SuspendLayout();
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Font = new Font("Segoe UI", 34F);
-            label1.Location = new Point(260, 27);
-            label1.Margin = new Padding(5, 0, 5, 0);
+            label1.Font = new Font("Trebuchet MS", 36F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label1.Location = new Point(438, 18);
             label1.Name = "label1";
-            label1.Size = new Size(223, 62);
+            label1.Size = new Size(402, 61);
             label1.TabIndex = 0;
-            label1.Text = "TEST_APP";
+            label1.Text = "SURVEYS BROWSE";
             // 
-            // tbTest
+            // linkLabel1
             // 
-            tbTest.Location = new Point(50, 92);
-            tbTest.Multiline = true;
-            tbTest.Name = "tbTest";
-            tbTest.Size = new Size(664, 310);
-            tbTest.TabIndex = 1;
+            linkLabel1.AutoSize = true;
+            linkLabel1.Font = new Font("Segoe UI", 20F);
+            linkLabel1.LinkColor = Color.Red;
+            linkLabel1.Location = new Point(1077, 625);
+            linkLabel1.Name = "linkLabel1";
+            linkLabel1.Size = new Size(175, 37);
+            linkLabel1.TabIndex = 1;
+            linkLabel1.TabStop = true;
+            linkLabel1.Text = "Next page ->";
             // 
             // App
             // 
             AutoScaleDimensions = new SizeF(11F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(761, 434);
-            Controls.Add(tbTest);
+            BackColor = SystemColors.ControlDarkDark;
+            BackgroundImageLayout = ImageLayout.Stretch;
+            ClientSize = new Size(1264, 681);
+            Controls.Add(linkLabel1);
             Controls.Add(label1);
             Font = new Font("Segoe UI", 14F);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Margin = new Padding(5);
+            MaximizeBox = false;
             Name = "App";
-            Text = "App";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "Voter";
             Load += App_Load;
             ResumeLayout(false);
             PerformLayout();
@@ -70,6 +80,6 @@
         #endregion
 
         private Label label1;
-        private TextBox tbTest;
+        private LinkLabel linkLabel1;
     }
 }
