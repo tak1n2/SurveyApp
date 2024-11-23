@@ -56,13 +56,25 @@ namespace SurveyApp
                         Application.Run(new App(tcpClient));
                     });
                     appThread.SetApartmentState(ApartmentState.STA);
+                    appThread.Start();             
+                    this.Close();
+                }
+                else if(msg == "LOGIN_SUCCESS_ADMIN") 
+                {
+                    Thread appThread = new Thread(() =>
+                    {
+                        Application.Run(new App(tcpClient));
+                    });
+                    appThread.SetApartmentState(ApartmentState.STA);
                     appThread.Start();
+                    this.Close();
+
 
                     Thread adminThread = new Thread(() =>
                     {
                         Application.Run(new AdminGUI(tcpClient));
                     });
-                    adminThread.SetApartmentState(ApartmentState.STA); 
+                    adminThread.SetApartmentState(ApartmentState.STA);
                     adminThread.Start();
                     this.Close();
                 }
