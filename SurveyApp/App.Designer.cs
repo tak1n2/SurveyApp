@@ -30,7 +30,9 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(App));
             label1 = new Label();
-            linkLabel1 = new LinkLabel();
+            lLNext = new LinkLabel();
+            lLPrev = new LinkLabel();
+            panelSurveyList = new Panel();
             SuspendLayout();
             // 
             // label1
@@ -43,17 +45,39 @@
             label1.TabIndex = 0;
             label1.Text = "SURVEYS BROWSE";
             // 
-            // linkLabel1
+            // lLNext
             // 
-            linkLabel1.AutoSize = true;
-            linkLabel1.Font = new Font("Segoe UI", 20F);
-            linkLabel1.LinkColor = Color.Red;
-            linkLabel1.Location = new Point(1077, 625);
-            linkLabel1.Name = "linkLabel1";
-            linkLabel1.Size = new Size(175, 37);
-            linkLabel1.TabIndex = 1;
-            linkLabel1.TabStop = true;
-            linkLabel1.Text = "Next page ->";
+            lLNext.AutoSize = true;
+            lLNext.Font = new Font("Segoe UI", 20F);
+            lLNext.LinkColor = Color.Red;
+            lLNext.Location = new Point(1077, 625);
+            lLNext.Name = "lLNext";
+            lLNext.Size = new Size(175, 37);
+            lLNext.TabIndex = 1;
+            lLNext.TabStop = true;
+            lLNext.Text = "Next page ->";
+            lLNext.LinkClicked += lLNext_LinkClicked;
+            // 
+            // lLPrev
+            // 
+            lLPrev.AutoSize = true;
+            lLPrev.Font = new Font("Segoe UI", 20F);
+            lLPrev.LinkColor = Color.Red;
+            lLPrev.Location = new Point(12, 635);
+            lLPrev.Name = "lLPrev";
+            lLPrev.Size = new Size(220, 37);
+            lLPrev.TabIndex = 2;
+            lLPrev.TabStop = true;
+            lLPrev.Text = "<- Previous page";
+            lLPrev.LinkClicked += lLPrev_LinkClicked;
+            // 
+            // panelSurveyList
+            // 
+            panelSurveyList.AutoScroll = true;
+            panelSurveyList.Location = new Point(89, 91);
+            panelSurveyList.Name = "panelSurveyList";
+            panelSurveyList.Size = new Size(1065, 500);
+            panelSurveyList.TabIndex = 3;
             // 
             // App
             // 
@@ -62,7 +86,9 @@
             BackColor = SystemColors.ControlDarkDark;
             BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(1264, 681);
-            Controls.Add(linkLabel1);
+            Controls.Add(panelSurveyList);
+            Controls.Add(lLPrev);
+            Controls.Add(lLNext);
             Controls.Add(label1);
             Font = new Font("Segoe UI", 14F);
             FormBorderStyle = FormBorderStyle.FixedSingle;
@@ -80,6 +106,8 @@
         #endregion
 
         private Label label1;
-        private LinkLabel linkLabel1;
+        private LinkLabel lLNext;
+        private LinkLabel lLPrev;
+        private Panel panelSurveyList;
     }
 }

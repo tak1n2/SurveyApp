@@ -50,9 +50,20 @@ namespace SurveyApp
                 var msg = await tcpClient.ReceiveMessageAsync();
                 if (msg == "LOGIN_SUCCESS")
                 {
-                    var appForm = new App(tcpClient);
-                    this.Hide();
-                    appForm.ShowDialog();
+                   
+                    Thread appThread = new Thread(() =>
+                    {
+                        Application.Run(new App(tcpClient));
+                    });
+                    appThread.SetApartmentState(ApartmentState.STA);
+                    appThread.Start();
+
+                    Thread adminThread = new Thread(() =>
+                    {
+                        Application.Run(new AdminGUI(tcpClient));
+                    });
+                    adminThread.SetApartmentState(ApartmentState.STA); 
+                    adminThread.Start();
                     this.Close();
                 }
                 else
