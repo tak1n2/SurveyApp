@@ -24,7 +24,6 @@ namespace SurveyApp
             ListenForServerMessages();
         }
 
-
         private async void ListenForServerMessages()
         {
             while (true)
@@ -115,10 +114,10 @@ namespace SurveyApp
             for (int i = 0; i < options.Length; i++)
             {
                 var option = options[i];
-                if (option.Contains("GET_CONFIRMED"))
-                {
-                    options[i] = option.Replace("GET_CONFIRMED", string.Empty);
-                }
+                //if (option.Contains("GET_CONFIRMED"))
+                //{
+                //    options[i] = option.Replace("GET_CONFIRMED", string.Empty);
+                //}
                 surveyPanel.Controls.Add(new RadioButton
                 {
                     Text = $"Option {n}: {options[i]}",
