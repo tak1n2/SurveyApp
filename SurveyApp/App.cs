@@ -168,9 +168,22 @@ namespace SurveyApp
             lLPrev.Enabled = currentPage > 0;
             lLNext.Enabled = end < surveys.Count;
         }
-        private void App_Load(object sender, EventArgs e)
+        private async void App_Load(object sender, EventArgs e)
         {
-            DisplayCurrentPage();
+            surveys.Clear(); 
+            panelSurveyList.Controls.Clear(); 
+            currentPage = 0; 
+
+            try
+            {
+                await SendSurveyRequest(); 
+                DisplayCurrentPage(); 
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error while refreshing surveys: {ex.Message}", "Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void lLNext_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -188,6 +201,26 @@ namespace SurveyApp
             {
                 currentPage--;
                 DisplayCurrentPage();
+            }
+        }
+        private async Task SendSurveyRequest()
+        {
+            var msg = $"GET_SURVEYS";
+            await tcpClient.SendMessageAsync(msg);
+        }
+         private async void btnRefresh_Click(object sender, EventArgs e)
+        {
+            surveys.Clear();
+            panelSurveyList.Controls.Clear();
+            currentPage = 0;
+            try
+            {
+                await SendSurveyRequest();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error while refreshing surveys: {ex.Message}", "Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }
