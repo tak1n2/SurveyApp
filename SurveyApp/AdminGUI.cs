@@ -20,35 +20,65 @@ namespace SurveyApp
         {
             InitializeComponent();
             tcpClient = client;
-            LoadSurveys();
         }
-        private async void LoadSurveys()
+        ///////////////////////////////////////////////////////////
+        private async Task SendCheckboxRequest()// НЕ ПРАЦЮЄ
+        {
+            var msg = $"GET_SURVEYS";
+            await tcpClient.SendMessageAsync(msg);
+        }
+
+        private async void button_Refresh_Click(object sender, EventArgs e)// НЕ ПРАЦЮЄ ПРАВИЛЬНО ОТРИМУЄ ТІЛЬКИ GET_CONFIRMED  Є ДЕБАГ ЩОБ ЦЕ ПОБАЧИТИ
         {
             try
             {
-                var msg = "GET_SURVEYS";
-                await tcpClient.SendMessageAsync(msg);
-                var surveys = await tcpClient.ReceiveMessageAsync();
-                if (!string.IsNullOrWhiteSpace(surveys))
+                cLBDelete.Items.Clear();
+                await SendCheckboxRequest();
+
+                var message = await tcpClient.ReceiveMessageAsync();
+                MessageBox.Show(message, "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                var messages = message.Split(new[] { "\n" }, StringSplitOptions.None);
+
+                foreach (var msg in messages)
                 {
-                    var surveyList = surveys.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
-                    cLBDelete.Items.Clear();
-                    foreach (var survey in surveyList)
+                    if (msg == "GET_CONFIRMED")
                     {
-                        var parts = survey.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-                        if (parts.Length > 1)
-                        {
-                            cLBDelete.Items.Add(parts[1]);
-                        }
+                        MessageBox.Show("Survey list successfully updated.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    else if (msg.StartsWith("NEW_SURVEY"))
+                    {
+                        AddSurveyToCheckboxList(msg.Substring(11));
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Unhandled message: {msg}");
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Failed to load surveys: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error while refreshing surveys: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
+        private void AddSurveyToCheckboxList(string surveyData)//ЦЕ НАЧЕ ПРАВИЛЬНО АЛЕ ПЕРЕВІРИТИ НЕ ВДАЛОСЬ 
+        {
+            var match = System.Text.RegularExpressions.Regex.Match(
+                surveyData,
+                @"^(\S+)\s+(.+)$" 
+            );
+            if (!match.Success)
+            {
+                Console.WriteLine("Invalid survey data format");
+                return;
+            }
+            var surveyName = match.Groups[2].Value;
+            if (!cLBDelete.Items.Contains(surveyName))
+            {
+                cLBDelete.Items.Add(surveyName);
+            }
+        }
+        ///////////////////////////////////////////////////////////
         private async void btnCreateSurvey_Click(object sender, EventArgs e)
         {
             var topic = tbTopic.Text.Trim();
@@ -76,7 +106,6 @@ namespace SurveyApp
             var surveyToDelete = cLBDelete.SelectedItem.ToString();
             var deleteCommand = $"DELETE {surveyToDelete}";
             await tcpClient.SendMessageAsync(deleteCommand);
-            LoadSurveys();
         }
     }
 }
