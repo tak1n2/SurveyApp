@@ -38,13 +38,22 @@ namespace SurveyApp
                         break;
                     }
 
-                    if (message.StartsWith("NEW_SURVEY"))
+                    
+                    var messages = message.Split(new[] { "\n" }, StringSplitOptions.None);
+
+                    foreach (var msg in messages)
                     {
-                        AddSurveyToGui(message.Substring(11));
-                    }
-                    else if (message.StartsWith("DELETE_SURVEY"))
-                    {
-                        RemoveSurveyFromGui(message.Substring(14));
+                        if (msg.StartsWith("NEW_SURVEY"))
+                        {
+                            AddSurveyToGui(msg.Substring(11));  
+                                                                  
+                        }
+                        else if (msg.StartsWith("DELETE_SURVEY"))
+                        {
+                            RemoveSurveyFromGui(msg.Substring(14));  
+                                                                   
+                            
+                        }
                     }
                 }
                 catch (Exception ex)
