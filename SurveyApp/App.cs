@@ -103,15 +103,19 @@ namespace SurveyApp
 
             int optionY = 70;
             int n = 1;
-            foreach (var option in options)
+            for (int i = 0; i < options.Length; i++)
             {
+                var option = options[i];
+                if (option.Contains("GET_CONFIRMED"))
+                {
+                    options[i] = option.Replace("GET_CONFIRMED", string.Empty);
+                }
                 surveyPanel.Controls.Add(new RadioButton
                 {
-                    Text = $"Option {n}: {option}",
+                    Text = $"Option {n}: {options[i]}",
                     AutoSize = true,
                     Location = new Point(10, optionY),
                     Font = new Font("Trebuchet MS", 14)
-
                 });
                 optionY += 30;
                 n++;
