@@ -103,15 +103,19 @@ namespace SurveyApp
 
             int optionY = 70;
             int n = 1;
-            foreach (var option in options)
+            for (int i = 0; i < options.Length; i++)
             {
+                var option = options[i];
+                if (option.Contains("GET_CONFIRMED"))
+                {
+                    options[i] = option.Replace("GET_CONFIRMED", string.Empty);
+                }
                 surveyPanel.Controls.Add(new RadioButton
                 {
-                    Text = $"Option {n}: {option}",
+                    Text = $"Option {n}: {options[i]}",
                     AutoSize = true,
                     Location = new Point(10, optionY),
                     Font = new Font("Trebuchet MS", 14)
-
                 });
                 optionY += 30;
                 n++;
@@ -168,9 +172,22 @@ namespace SurveyApp
             lLPrev.Enabled = currentPage > 0;
             lLNext.Enabled = end < surveys.Count;
         }
-        private void App_Load(object sender, EventArgs e)
+        private async void App_Load(object sender, EventArgs e)
         {
-            DisplayCurrentPage();
+            surveys.Clear(); 
+            panelSurveyList.Controls.Clear(); 
+            currentPage = 0; 
+
+            try
+            {
+                await SendSurveyRequest(); 
+                DisplayCurrentPage(); 
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error while refreshing surveys: {ex.Message}", "Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void lLNext_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -188,6 +205,26 @@ namespace SurveyApp
             {
                 currentPage--;
                 DisplayCurrentPage();
+            }
+        }
+        private async Task SendSurveyRequest()
+        {
+            var msg = $"GET_SURVEYS";
+            await tcpClient.SendMessageAsync(msg);
+        }
+         private async void btnRefresh_Click(object sender, EventArgs e)
+        {
+            surveys.Clear();
+            panelSurveyList.Controls.Clear();
+            currentPage = 0;
+            try
+            {
+                await SendSurveyRequest();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error while refreshing surveys: {ex.Message}", "Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

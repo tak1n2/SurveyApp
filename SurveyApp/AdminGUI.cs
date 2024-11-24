@@ -20,6 +20,33 @@ namespace SurveyApp
         {
             InitializeComponent();
             tcpClient = client;
+            LoadSurveys();
+        }
+        private async void LoadSurveys()
+        {
+            try
+            {
+                var msg = "GET_SURVEYS";
+                await tcpClient.SendMessageAsync(msg);
+                var surveys = await tcpClient.ReceiveMessageAsync();
+                if (!string.IsNullOrWhiteSpace(surveys))
+                {
+                    var surveyList = surveys.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+                    cLBDelete.Items.Clear();
+                    foreach (var survey in surveyList)
+                    {
+                        var parts = survey.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                        if (parts.Length > 1)
+                        {
+                            cLBDelete.Items.Add(parts[1]);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to load surveys: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private async void btnCreateSurvey_Click(object sender, EventArgs e)
@@ -49,6 +76,7 @@ namespace SurveyApp
             var surveyToDelete = cLBDelete.SelectedItem.ToString();
             var deleteCommand = $"DELETE {surveyToDelete}";
             await tcpClient.SendMessageAsync(deleteCommand);
+            LoadSurveys();
         }
     }
 }
