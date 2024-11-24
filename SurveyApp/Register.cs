@@ -69,18 +69,8 @@ namespace SurveyApp
                     {
                         Application.Run(new App(tcpClient));
                     });
-                    appThread.SetApartmentState(ApartmentState.STA); // Required for Windows Forms
+                    appThread.SetApartmentState(ApartmentState.STA);
                     appThread.Start();
-
-                    // Launch AdminGUI form on a separate thread
-                    //Thread adminThread = new Thread(() =>
-                    //{
-                    //    Application.Run(new AdminGUI(tcpClient));
-                    //});
-                    //adminThread.SetApartmentState(ApartmentState.STA); // Required for Windows Forms
-                    //adminThread.Start();
-
-                    // Close the registration form
                     this.Close();
                     
                 }
