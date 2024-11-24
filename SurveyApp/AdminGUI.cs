@@ -63,7 +63,6 @@ namespace SurveyApp
 
             var createCommand = $"CREATE {topic} \"{description}\" {string.Join("|", options)}";
             await tcpClient.SendMessageAsync(createCommand);
-            LoadSurveys();
         }
 
         private async void btnDelete_Survey_Click(object sender, EventArgs e)

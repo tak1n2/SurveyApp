@@ -14,6 +14,8 @@ namespace ClientForApp
 
         public async Task ConnectAsync(string ipAddress, int port)
         {
+            if (_tcpClient?.Connected == true) return; 
+
             try
             {
                 _tcpClient = new TcpClient();
