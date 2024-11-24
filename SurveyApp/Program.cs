@@ -1,3 +1,5 @@
+using ClientForApp;
+
 namespace SurveyApp
 {
     internal static class Program
@@ -11,7 +13,8 @@ namespace SurveyApp
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
-            Application.Run(new RegistratrionForm());
+            var client = new Client();
+            Application.Run(new RegistratrionForm(client));
         }
     }
 }

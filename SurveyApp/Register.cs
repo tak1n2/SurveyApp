@@ -6,10 +6,10 @@ namespace SurveyApp
     {
         private readonly Client tcpClient;
 
-        public RegistratrionForm()
+        public RegistratrionForm(Client client)
         {
             InitializeComponent();
-            tcpClient = new Client();
+            tcpClient = client;
             this.Load += RegistratrionForm_Load!;
         }
 
