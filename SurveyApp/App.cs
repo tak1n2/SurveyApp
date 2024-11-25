@@ -57,19 +57,20 @@ namespace SurveyApp
                         else if (msg.StartsWith("UPDATE_RESULTS"))
                         {
                             var parts = msg.Substring(15).Split('|');
-                            string surveyId = parts[0];
+                            string surveyId = parts[0]; 
 
                             var surveyPanel = surveys.FirstOrDefault(s => s.Name == surveyId);
                             if (surveyPanel != null)
                             {
+                               
                                 var dgv = surveyPanel.Controls.OfType<DataGridView>().FirstOrDefault();
                                 if (dgv != null)
                                 {
                                     dgv.Rows.Clear(); 
 
-                                    foreach (var result in parts.Skip(1)) 
+                                    foreach (var result in parts.Skip(1))
                                     {
-                                        var resultData = result.Split(';'); 
+                                        var resultData = result.Split(';');
                                         if (resultData.Length == 2)
                                         {
                                             string optionText = resultData[0];
@@ -78,6 +79,10 @@ namespace SurveyApp
                                         }
                                     }
                                 }
+                            }
+                            else
+                            {
+                                Console.WriteLine($"Survey Panel with ID {surveyId} not found.");
                             }
                         }
                     }
