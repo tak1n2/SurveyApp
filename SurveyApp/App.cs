@@ -54,31 +54,31 @@ namespace SurveyApp
                         }
                         else if (msg.StartsWith("UPDATE_RESULTS"))
                         {
-                            var parts = msg.Substring(15).Split('|'); 
-                            foreach (var part in parts)
-                            {
-                                var data = part.Split(';');
-                                if (data.Length == 3)
-                                {
-                                    string surveyId = data[0];
-                                    string option = data[1];
+                            var parts = msg.Substring(15).Split('|');
+                            string surveyId = parts[0];
 
-                                    var surveyPanel = surveys.FirstOrDefault(s => s.Name == surveyId);
-                                    if (surveyPanel != null)
+                            var surveyPanel = surveys.FirstOrDefault(s => s.Name == surveyId);
+                            if (surveyPanel != null)
+                            {
+                                var dgv = surveyPanel.Controls.OfType<DataGridView>().FirstOrDefault();
+                                if (dgv != null)
+                                {
+                                    dgv.Rows.Clear(); 
+
+                                    foreach (var result in parts.Skip(1)) 
                                     {
-                                        var dgv = surveyPanel.Controls
-                                                             .OfType<DataGridView>()
-                                                             .FirstOrDefault();
-                                        if (dgv != null)
+                                        var resultData = result.Split(';'); 
+                                        if (resultData.Length == 2)
                                         {
-                                            UpdateSurveyResultsGrid(dgv, option);
+                                            string optionText = resultData[0];
+                                            int voteCount = int.Parse(resultData[1]);
+                                            dgv.Rows.Add(optionText, voteCount);
                                         }
                                     }
-
                                 }
                             }
-                     }
-                }
+                        }
+                    }
              }
                 catch (Exception ex)
                 {
@@ -175,8 +175,7 @@ namespace SurveyApp
 
             voteButton.Click += async (sender, e) =>
             {
-                var selectedOption = surveyPanel.Controls.OfType<RadioButton>()
-                                                         .FirstOrDefault(rb => rb.Checked);
+                var selectedOption = surveyPanel.Controls.OfType<RadioButton>().FirstOrDefault(rb => rb.Checked);
 
                 if (selectedOption != null)
                 {
@@ -187,19 +186,17 @@ namespace SurveyApp
                         string optionText = selectedOption.Text.Substring(colonIndex + 1).Trim();
 
                         var voteMessage = $"VOTE {surveyId} \"{optionText}\"";
-
                         await tcpClient.SendMessageAsync(voteMessage);
 
                         MessageBox.Show($"You voted for: {selectedOption.Text}", "Vote Submitted",
                                         MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                        UpdateSurveyResultsGrid(dgvSurveyResults, optionText);
-                        voteButton.Enabled = false; 
+                        voteButton.Enabled = false;
                     }
                     catch (Exception ex)
                     {
                         MessageBox.Show($"Failed to send vote: {ex.Message}", "Error",
-                                         MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                        MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
                 else
