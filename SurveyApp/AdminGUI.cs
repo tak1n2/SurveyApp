@@ -10,6 +10,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SurveyApp
 {
@@ -58,8 +59,16 @@ namespace SurveyApp
             var topic = match.Groups[2].Value;
             var description = match.Groups[3].Value;
             var options = match.Groups[4].Value.Split('|');
-            MessageBox.Show(topic, " ");
+            addItemClb(topic);
+            cLBDelete.Items.Add("PEREVIRKA");
             cLBDelete.Items.Add(topic);// Чомусь не додається треба вирішити хоча отримує все правильно
+        }
+        private void addItemClb(string data)// Воно не додається скоріше всього через виклик перевірте хтось хто пам'ятає як це робится просто переписувати за декілька годин  клієнта щоб він приймав усе вже не дуже хочется бо у нас все полетить шкереберть
+        {
+            MessageBox.Show(data, " ");
+            cLBDelete.Items.Add("PEREVIRKA");
+            cLBDelete.Items.Add(data);
+            
         }
         ///////////////////////////////////////////////////////////
         private async void btnCreateSurvey_Click(object sender, EventArgs e)
