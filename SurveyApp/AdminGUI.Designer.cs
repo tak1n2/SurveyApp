@@ -43,6 +43,7 @@
             cLBDelete = new CheckedListBox();
             label5 = new Label();
             btnDelete_Survey = new Button();
+            label6 = new Label();
             AdminPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)nUDQuantity).BeginInit();
             panel1.SuspendLayout();
@@ -127,7 +128,7 @@
             // 
             nUDQuantity.BackColor = Color.Black;
             nUDQuantity.ForeColor = Color.Green;
-            nUDQuantity.Location = new Point(325, 164);
+            nUDQuantity.Location = new Point(324, 164);
             nUDQuantity.Name = "nUDQuantity";
             nUDQuantity.Size = new Size(120, 32);
             nUDQuantity.TabIndex = 3;
@@ -167,6 +168,7 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(label6);
             panel1.Controls.Add(cLBDelete);
             panel1.Controls.Add(label5);
             panel1.Controls.Add(btnDelete_Survey);
@@ -180,7 +182,7 @@
             cLBDelete.BackColor = SystemColors.InactiveCaptionText;
             cLBDelete.ForeColor = SystemColors.Window;
             cLBDelete.FormattingEnabled = true;
-            cLBDelete.Location = new Point(61, 73);
+            cLBDelete.Location = new Point(65, 112);
             cLBDelete.Name = "cLBDelete";
             cLBDelete.Size = new Size(312, 463);
             cLBDelete.TabIndex = 8;
@@ -191,7 +193,7 @@
             label5.BackColor = Color.FromArgb(64, 0, 64);
             label5.Font = new Font("Trebuchet MS", 20.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
             label5.ForeColor = Color.Snow;
-            label5.Location = new Point(22, 19);
+            label5.Location = new Point(23, 63);
             label5.Name = "label5";
             label5.Size = new Size(384, 35);
             label5.TabIndex = 7;
@@ -212,6 +214,18 @@
             btnDelete_Survey.UseVisualStyleBackColor = true;
             btnDelete_Survey.Click += btnDelete_Survey_Click;
             // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.BackColor = Color.FromArgb(64, 0, 64);
+            label6.Font = new Font("Trebuchet MS", 20.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label6.ForeColor = Color.Red;
+            label6.Location = new Point(113, 19);
+            label6.Name = "label6";
+            label6.Size = new Size(195, 35);
+            label6.TabIndex = 9;
+            label6.Text = "DOESN'T WORK";
+            // 
             // AdminGUI
             // 
             AutoScaleDimensions = new SizeF(11F, 25F);
@@ -225,7 +239,6 @@
             Margin = new Padding(5);
             MaximizeBox = false;
             Name = "AdminGUI";
-            StartPosition = FormStartPosition.CenterScreen;
             Text = "Voter (Admin)";
             AdminPanel.ResumeLayout(false);
             AdminPanel.PerformLayout();
@@ -251,5 +264,6 @@
         private Button btnDelete_Survey;
         private Label label5;
         private CheckedListBox cLBDelete;
+        private Label label6;
     }
 }

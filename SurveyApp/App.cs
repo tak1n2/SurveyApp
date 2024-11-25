@@ -190,7 +190,7 @@ namespace SurveyApp
 
                         MessageBox.Show($"You voted for: {selectedOption.Text}", "Vote Submitted",
                                         MessageBoxButtons.OK, MessageBoxIcon.Information);
-
+                        UpdateSurveyResultsGrid(dgvSurveyResults, optionText);
                         voteButton.Enabled = false;
                     }
                     catch (Exception ex)
