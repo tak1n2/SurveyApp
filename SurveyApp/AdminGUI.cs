@@ -20,6 +20,8 @@ namespace SurveyApp
         {
             InitializeComponent();
             tcpClient = client;
+            tcpClient.MessageReceived -= TcpClient_MessageReceived;
+            tcpClient.MessageReceived += TcpClient_MessageReceived;
         }
         ///////////////////////////////////////////////////////////
         private async Task SendCheckboxRequest()// НЕ ПРАЦЮЄ
@@ -35,13 +37,21 @@ namespace SurveyApp
 
                 foreach (var msg in messages)
                 {
-                    if (msg == "GET_CONFIRMED")
-                    {
-                        MessageBox.Show("Survey list successfully updated.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
-                    else if (msg.StartsWith("NEW_SURVEY"))
+                    if (msg.StartsWith("NEW_SURVEY"))
                     {
                         AddSurveyToCheckboxList(msg.Substring(11));
+                    }
+                    else if (msg.StartsWith("GET_SURVEYS"))
+                    {
+                        var surveys = msg.Substring(11).Split('|'); // Передбачається, що опитування розділені "|"
+                        foreach (var survey in surveys)
+                        {
+                            AddSurveyToCheckboxList(survey);
+                        }
+                    }
+                    else if (msg == "GET_CONFIRMED")
+                    {
+                        MessageBox.Show("Survey list successfully updated.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     else
                     {
@@ -68,19 +78,21 @@ namespace SurveyApp
             }
         }
 
-        private void AddSurveyToCheckboxList(string surveyData)//ЦЕ НАЧЕ ПРАВИЛЬНО АЛЕ ПЕРЕВІРИТИ НЕ ВДАЛОСЬ 
+        private void AddSurveyToCheckboxList(string surveyData)
         {
             var match = System.Text.RegularExpressions.Regex.Match(
                 surveyData,
-                @"^(\S+)\s+(.+)$" 
+                @"^(\S+)\s+(.+)$"
             );
+
             if (!match.Success)
             {
-                Console.WriteLine("Invalid survey data format");
+                Console.WriteLine($"Invalid survey data format: {surveyData}");
                 return;
             }
-            var surveyName = match.Groups[2].Value;
-            if (!cLBDelete.Items.Contains(surveyName))
+
+            var surveyName = match.Groups[2].Value.Trim();
+            if (!string.IsNullOrWhiteSpace(surveyName) && !cLBDelete.Items.Contains(surveyName))
             {
                 cLBDelete.Items.Add(surveyName);
             }

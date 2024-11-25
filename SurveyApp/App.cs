@@ -22,6 +22,7 @@ namespace SurveyApp
         {
             InitializeComponent();
             tcpClient = client;
+            tcpClient.MessageReceived -= TcpClient_MessageReceived;
             tcpClient.MessageReceived += TcpClient_MessageReceived;
         }
 
@@ -36,6 +37,7 @@ namespace SurveyApp
                     if (msg.StartsWith("NEW_SURVEY"))
                     {
                         AddSurveyToGui(msg.Substring(11));
+                        MessageBox.Show(msg, "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     else if (msg.StartsWith("DELETE_SURVEY"))
                     {

@@ -44,6 +44,7 @@ namespace ClientForApp
 
                     var message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
                     OnMessageReceived(new MessageReceivedEventArgs(message));
+                    MessageBox.Show(message, "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 catch (Exception ex)
                 {
