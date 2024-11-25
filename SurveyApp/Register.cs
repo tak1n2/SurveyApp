@@ -11,7 +11,25 @@ namespace SurveyApp
             InitializeComponent();
             tcpClient = client;
             this.Load += RegistratrionForm_Load!;
+
+            tbLogin.KeyDown += RegistrKeyDown;
+            tbPsw.KeyDown += RegistrKeyDown;
+            tbPswConfirm.KeyDown += RegistrKeyDown;
+
+            
         }
+
+        private void RegistrKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                btnRgstr_Click(sender, e);
+                e.Handled = true;
+                e.SuppressKeyPress = true;
+            }
+
+        }
+
 
         private async Task InitializeClientAsync()
         {

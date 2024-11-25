@@ -20,6 +20,10 @@ namespace SurveyApp
         {
             InitializeComponent();
             tcpClient = client;
+
+            tbLogin.KeyDown += LoginKeyDown;
+            tbPasswrod.KeyDown += LoginKeyDown;
+
         }
 
        
@@ -35,6 +39,18 @@ namespace SurveyApp
         {
             var msg = $"LOGIN {username} {password}";
             await tcpClient.SendMessageAsync(msg);
+        }
+
+
+        private void LoginKeyDown(object sender,KeyEventArgs e)
+        {
+            if(e.KeyCode == Keys.Enter)
+            {
+                btnRgstr_Click(sender, e);
+                e.Handled = true;
+                e.SuppressKeyPress = true;
+            }
+
         }
 
         private async void btnRgstr_Click(object sender, EventArgs e)
