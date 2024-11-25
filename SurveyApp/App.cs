@@ -135,15 +135,31 @@ namespace SurveyApp
                 Location = new Point(35, optionY + 10) 
             };
 
-            voteButton.Click += (sender, e) =>
+            voteButton.Click += async (sender, e) =>
             {
                 var selectedOption = surveyPanel.Controls.OfType<RadioButton>()
                                                          .FirstOrDefault(rb => rb.Checked);
 
                 if (selectedOption != null)
                 {
-                    MessageBox.Show($"You voted for: {selectedOption.Text}", "Vote Submitted",
-                                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    try
+                    {
+                        var surveyId = surveyPanel.Tag.ToString();
+                        int colonIndex = selectedOption.Text.IndexOf(':');  // Находим индекс двоеточия
+                        string OptionText = selectedOption.Text.Substring(colonIndex + 1);
+                        
+                            var voteMessage = $"VOTE {surveyId} \"{OptionText}\"";
+
+                        await tcpClient.SendMessageAsync(voteMessage);
+
+                        MessageBox.Show($"You voted for: {selectedOption.Text}", "Vote Submitted",
+                                MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    catch(Exception ex) {
+                        MessageBox.Show($"Failed to send vote: {ex.Message}", "Error",
+                             MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    
                 }
                 else
                 {
