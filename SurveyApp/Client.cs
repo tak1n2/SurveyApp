@@ -21,14 +21,39 @@ namespace ClientForApp
                 _tcpClient = new TcpClient();
                 await _tcpClient.ConnectAsync(ipAddress, port);
                 OnMessageReceived(new MessageReceivedEventArgs($"Connected to server at {ipAddress}:{port}"));
+                _ = ListenForMessagesAsync();
             }
             catch (Exception ex)
             {
                 OnMessageReceived(new MessageReceivedEventArgs($"Error connecting to server: {ex.Message}"));
             }
         }
+        private async Task ListenForMessagesAsync()
+        {
+            var stream = _tcpClient?.GetStream();
+            if (stream == null) throw new InvalidOperationException("TCP client is not connected.");
 
-        public async Task SendMessageAsync(string message)
+            var buffer = new byte[1024];
+
+            while (_tcpClient?.Connected == true)
+            {
+                try
+                {
+                    int bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length);
+                    if (bytesRead == 0) break;
+
+                    var message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
+                    OnMessageReceived(new MessageReceivedEventArgs(message));
+                }
+                catch (Exception ex)
+                {
+                    OnMessageReceived(new MessageReceivedEventArgs($"Error receiving message: {ex.Message}"));
+                    break;
+                }
+            }
+        }
+    
+    public async Task SendMessageAsync(string message)
         {
             try
             {

@@ -27,17 +27,11 @@ namespace SurveyApp
             var msg = $"GET_SURVEYS";
             await tcpClient.SendMessageAsync(msg);
         }
-
-        private async void button_Refresh_Click(object sender, EventArgs e)// НЕ ПРАЦЮЄ ПРАВИЛЬНО ОТРИМУЄ ТІЛЬКИ GET_CONFIRMED  Є ДЕБАГ ЩОБ ЦЕ ПОБАЧИТИ
+        private void TcpClient_MessageReceived(object? sender, Client.MessageReceivedEventArgs e)
         {
-            try
+            Invoke((Action)(() =>
             {
-                cLBDelete.Items.Clear();
-                await SendCheckboxRequest();
-
-                var message = await tcpClient.ReceiveMessageAsync();
-                MessageBox.Show(message, "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                var messages = message.Split(new[] { "\n" }, StringSplitOptions.None);
+                var messages = e.Message.Split(new[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
 
                 foreach (var msg in messages)
                 {
@@ -54,7 +48,20 @@ namespace SurveyApp
                         Console.WriteLine($"Unhandled message: {msg}");
                     }
                 }
-            }
+            }));
+        }
+        private async void button_Refresh_Click(object sender, EventArgs e)// НЕ ПРАЦЮЄ ПРАВИЛЬНО ОТРИМУЄ ТІЛЬКИ GET_CONFIRMED  Є ДЕБАГ ЩОБ ЦЕ ПОБАЧИТИ
+        {
+            try
+            {
+                cLBDelete.Items.Clear();
+                await SendCheckboxRequest();
+
+                var message = await tcpClient.ReceiveMessageAsync();
+                MessageBox.Show(message, "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+           
+             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error while refreshing surveys: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);

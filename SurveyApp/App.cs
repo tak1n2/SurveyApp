@@ -17,53 +17,37 @@ namespace SurveyApp
         public readonly List<Panel> surveys = new List<Panel>();
         private int currentPage = 0;
         private const int SurveysPerPage = 4;
+
         public App(Client client)
         {
             InitializeComponent();
             tcpClient = client;
-            ListenForServerMessages();
+            tcpClient.MessageReceived += TcpClient_MessageReceived;
         }
 
-        private async void ListenForServerMessages()
+        private void TcpClient_MessageReceived(object? sender, Client.MessageReceivedEventArgs e)
         {
-            while (true)
+            Invoke((Action)(() =>
             {
-                try
+                var messages = e.Message.Split(new[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
+
+                foreach (var msg in messages)
                 {
-                    var message = await tcpClient.ReceiveMessageAsync();
-
-                    if (message == null)
+                    if (msg.StartsWith("NEW_SURVEY"))
                     {
-                        break;
+                        AddSurveyToGui(msg.Substring(11));
                     }
-
-                    
-                    var messages = message.Split(new[] { "\n" }, StringSplitOptions.None);
-
-                    foreach (var msg in messages)
+                    else if (msg.StartsWith("DELETE_SURVEY"))
                     {
-                        if (msg.StartsWith("NEW_SURVEY"))
-                        {
-                            AddSurveyToGui(msg.Substring(11));  
-                                                                  
-                        }
-                        else if (msg.StartsWith("DELETE_SURVEY"))
-                        {
-                            RemoveSurveyFromGui(msg.Substring(14));  
-                                                                   
-                            
-                        }
+                        RemoveSurveyFromGui(msg.Substring(14));
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Unhandled message: {msg}");
                     }
                 }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Error in ListenForServerMessages: {ex.Message}");
-                    break;
-                }
-            }
+            }));
         }
-
-
 
         private void AddSurveyToGui(string surveyData)
         {
@@ -111,16 +95,11 @@ namespace SurveyApp
 
             int optionY = 70;
             int n = 1;
-            for (int i = 0; i < options.Length; i++)
+            foreach (var option in options)
             {
-                var option = options[i];
-                //if (option.Contains("GET_CONFIRMED"))
-                //{
-                //    options[i] = option.Replace("GET_CONFIRMED", string.Empty);
-                //}
                 surveyPanel.Controls.Add(new RadioButton
                 {
-                    Text = $"Option {n}: {options[i]}",
+                    Text = $"Option {n}: {option}",
                     AutoSize = true,
                     Location = new Point(10, optionY),
                     Font = new Font("Trebuchet MS", 14)
@@ -128,11 +107,12 @@ namespace SurveyApp
                 optionY += 30;
                 n++;
             }
+
             var voteButton = new Button
             {
                 Text = "Vote",
                 Size = new Size(80, 30),
-                Location = new Point(35, optionY + 10) 
+                Location = new Point(35, optionY + 10)
             };
 
             voteButton.Click += async (sender, e) =>
@@ -145,21 +125,21 @@ namespace SurveyApp
                     try
                     {
                         var surveyId = surveyPanel.Tag.ToString();
-                        int colonIndex = selectedOption.Text.IndexOf(':');  // Находим индекс двоеточия
-                        string OptionText = selectedOption.Text.Substring(colonIndex + 1);
-                        
-                            var voteMessage = $"VOTE {surveyId} \"{OptionText}\"";
+                        var colonIndex = selectedOption.Text.IndexOf(':');
+                        var optionText = selectedOption.Text.Substring(colonIndex + 1);
+
+                        var voteMessage = $"VOTE {surveyId} \"{optionText}\"";
 
                         await tcpClient.SendMessageAsync(voteMessage);
 
                         MessageBox.Show($"You voted for: {selectedOption.Text}", "Vote Submitted",
                                 MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
-                    catch(Exception ex) {
+                    catch (Exception ex)
+                    {
                         MessageBox.Show($"Failed to send vote: {ex.Message}", "Error",
                              MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
-                    
                 }
                 else
                 {
@@ -167,10 +147,12 @@ namespace SurveyApp
                                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             };
+
             surveyPanel.Controls.Add(voteButton);
             surveys.Add(surveyPanel);
             DisplayCurrentPage();
         }
+
         private void RemoveSurveyFromGui(string surveyId)
         {
             var surveyPanel = surveys.FirstOrDefault(s => s.Name == surveyId);
@@ -180,6 +162,7 @@ namespace SurveyApp
                 DisplayCurrentPage();
             }
         }
+
         private void DisplayCurrentPage()
         {
             panelSurveyList.Controls.Clear();
@@ -196,22 +179,29 @@ namespace SurveyApp
             lLPrev.Enabled = currentPage > 0;
             lLNext.Enabled = end < surveys.Count;
         }
+
         private async void App_Load(object sender, EventArgs e)
         {
-            surveys.Clear(); 
-            panelSurveyList.Controls.Clear(); 
-            currentPage = 0; 
+            surveys.Clear();
+            panelSurveyList.Controls.Clear();
+            currentPage = 0;
 
             try
             {
-                await SendSurveyRequest(); 
-                DisplayCurrentPage(); 
+                await SendSurveyRequest();
+                DisplayCurrentPage();
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error while refreshing surveys: {ex.Message}", "Error",
                                 MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private async Task SendSurveyRequest()
+        {
+            var msg = $"GET_SURVEYS";
+            await tcpClient.SendMessageAsync(msg);
         }
 
         private void lLNext_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -231,16 +221,13 @@ namespace SurveyApp
                 DisplayCurrentPage();
             }
         }
-        private async Task SendSurveyRequest()
-        {
-            var msg = $"GET_SURVEYS";
-            await tcpClient.SendMessageAsync(msg);
-        }
-         private async void btnRefresh_Click(object sender, EventArgs e)
+
+        private async void btnRefresh_Click(object sender, EventArgs e)
         {
             surveys.Clear();
             panelSurveyList.Controls.Clear();
             currentPage = 0;
+
             try
             {
                 await SendSurveyRequest();
@@ -252,4 +239,5 @@ namespace SurveyApp
             }
         }
     }
+
 }
