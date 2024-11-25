@@ -59,7 +59,7 @@ namespace SurveyApp
             var description = match.Groups[3].Value;
             var options = match.Groups[4].Value.Split('|');
             MessageBox.Show(topic, " ");
-            cLBDelete.Items.Add(topic);
+            cLBDelete.Items.Add(topic);// Чомусь не додається треба вирішити хоча отримує все правильно
         }
         ///////////////////////////////////////////////////////////
         private async void btnCreateSurvey_Click(object sender, EventArgs e)
