@@ -61,6 +61,7 @@ namespace SurveyApp
                 }
                 else if(msg == "LOGIN_SUCCESS_ADMIN") 
                 {
+                    App appInstance = new App(tcpClient);
                     Thread appThread = new Thread(() =>
                     {
                         Application.Run(new App(tcpClient));
@@ -72,7 +73,7 @@ namespace SurveyApp
 
                     Thread adminThread = new Thread(() =>
                     {
-                        Application.Run(new AdminGUI(tcpClient));
+                        Application.Run(new AdminGUI(tcpClient, appInstance));
                     });
                     adminThread.SetApartmentState(ApartmentState.STA);
                     adminThread.Start();

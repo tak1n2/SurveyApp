@@ -193,7 +193,9 @@
             cLBDelete.ForeColor = SystemColors.Window;
             cLBDelete.FormattingEnabled = true;
             cLBDelete.Location = new Point(61, 73);
+            label1.Font = new Font("Trebuchet MS", 10F, FontStyle.Regular, GraphicsUnit.Point, 0);
             cLBDelete.Name = "cLBDelete";
+            cLBDelete.ItemHeight = 30;
             cLBDelete.Size = new Size(312, 480);
             cLBDelete.TabIndex = 8;
             // 

@@ -21,6 +21,7 @@ namespace SurveyApp
         {
             InitializeComponent();
             tcpClient = client;
+            AdminGUI adminForm = new AdminGUI(tcpClient, this);
             ListenForServerMessages();
         }
 
@@ -31,7 +32,13 @@ namespace SurveyApp
                 try
                 {
                     var message = await tcpClient.ReceiveMessageAsync();
+                    if (message.StartsWith("NEW_SURVEY"))
+                    {
+                        surveys.Clear();
+                        panelSurveyList.Controls.Clear();
+                        currentPage = 0;
 
+                    }
                     if (message == null)
                     {
                         break;
@@ -44,8 +51,8 @@ namespace SurveyApp
                     {
                         if (msg.StartsWith("NEW_SURVEY"))
                         {
-                            AddSurveyToGui(msg.Substring(11));  
-                                                                  
+                            AddSurveyToGui(msg.Substring(11));
+
                         }
                         else if (msg.StartsWith("DELETE_SURVEY"))
                         {
@@ -64,7 +71,7 @@ namespace SurveyApp
         }
 
 
-
+        public event Action<string> NewSurveyAdded;
         private void AddSurveyToGui(string surveyData)
         {
             var match = System.Text.RegularExpressions.Regex.Match(
@@ -77,7 +84,7 @@ namespace SurveyApp
                 Console.WriteLine("Invalid survey data format");
                 return;
             }
-
+            NewSurveyAdded?.Invoke(surveyData);
             var surveyId = match.Groups[1].Value;
             var topic = match.Groups[2].Value;
             var description = match.Groups[3].Value;
@@ -238,9 +245,6 @@ namespace SurveyApp
         }
          private async void btnRefresh_Click(object sender, EventArgs e)
         {
-            surveys.Clear();
-            panelSurveyList.Controls.Clear();
-            currentPage = 0;
             try
             {
                 await SendSurveyRequest();

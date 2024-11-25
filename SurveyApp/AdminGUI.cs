@@ -16,10 +16,11 @@ namespace SurveyApp
     public partial class AdminGUI : Form
     {
         private readonly Client tcpClient;
-        public AdminGUI(Client client)
+        public AdminGUI(Client client, App app)
         {
             InitializeComponent();
             tcpClient = client;
+            app.NewSurveyAdded += AdminGUI_AddSurveyToCheckboxList;
         }
         ///////////////////////////////////////////////////////////
         private async Task SendCheckboxRequest()// НЕ ПРАЦЮЄ
@@ -34,26 +35,6 @@ namespace SurveyApp
             {
                 cLBDelete.Items.Clear();
                 await SendCheckboxRequest();
-
-                var message = await tcpClient.ReceiveMessageAsync();
-                MessageBox.Show(message, "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                var messages = message.Split(new[] { "\n" }, StringSplitOptions.None);
-
-                foreach (var msg in messages)
-                {
-                    if (msg == "GET_CONFIRMED")
-                    {
-                        MessageBox.Show("Survey list successfully updated.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
-                    else if (msg.StartsWith("NEW_SURVEY"))
-                    {
-                        AddSurveyToCheckboxList(msg.Substring(11));
-                    }
-                    else
-                    {
-                        Console.WriteLine($"Unhandled message: {msg}");
-                    }
-                }
             }
             catch (Exception ex)
             {
@@ -61,22 +42,24 @@ namespace SurveyApp
             }
         }
 
-        private void AddSurveyToCheckboxList(string surveyData)//ЦЕ НАЧЕ ПРАВИЛЬНО АЛЕ ПЕРЕВІРИТИ НЕ ВДАЛОСЬ 
+        private void AdminGUI_AddSurveyToCheckboxList(string surveyData) // Метод для обробки події
         {
             var match = System.Text.RegularExpressions.Regex.Match(
-                surveyData,
-                @"^(\S+)\s+(.+)$" 
-            );
+                           surveyData,
+                           @"^(\S+)\s+(\S+)\s+""([^""]+)""\s+(.+)$"
+                       );
+
             if (!match.Success)
             {
                 Console.WriteLine("Invalid survey data format");
                 return;
             }
-            var surveyName = match.Groups[2].Value;
-            if (!cLBDelete.Items.Contains(surveyName))
-            {
-                cLBDelete.Items.Add(surveyName);
-            }
+            var surveyId = match.Groups[1].Value;
+            var topic = match.Groups[2].Value;
+            var description = match.Groups[3].Value;
+            var options = match.Groups[4].Value.Split('|');
+            MessageBox.Show(topic, " ");
+            cLBDelete.Items.Add(topic);
         }
         ///////////////////////////////////////////////////////////
         private async void btnCreateSurvey_Click(object sender, EventArgs e)
@@ -93,7 +76,7 @@ namespace SurveyApp
 
             var createCommand = $"CREATE {topic} \"{description}\" {string.Join("|", options)}";
             await tcpClient.SendMessageAsync(createCommand);
-        }
+        }   
 
         private async void btnDelete_Survey_Click(object sender, EventArgs e)
         {
