@@ -191,12 +191,12 @@ namespace SurveyApp
                         var voteMessage = $"VOTE {surveyId} \"{optionText}\"";
                         await tcpClient.SendMessageAsync(voteMessage);
 
+                        UpdateSurveyResultsGrid(dgvResults, optionText);
                         MessageBox.Show($"You voted for: {selectedOption.Text}", "Vote Submitted",
                                         MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                         votedSurveys.Add(surveyId);
                         SaveVotedSurveys();
-                        UpdateSurveyResultsGrid(dgvResults, optionText);
                         voteButton.Enabled = false;
                     }
                     catch (Exception ex)
@@ -250,9 +250,10 @@ namespace SurveyApp
             int start = currentPage * SurveysPerPage;
             int end = Math.Min(start + SurveysPerPage, surveys.Count);
 
+            int verticalSpacing = 20;
             for (int i = start; i < end; i++)
             {
-                surveys[i].Location = new Point(0, (i - start) * 120);
+                surveys[i].Location = new Point(0, (i - start) * (surveys[i].Height + verticalSpacing));
                 panelSurveyList.Controls.Add(surveys[i]);
             }
 
