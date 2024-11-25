@@ -35,17 +35,14 @@
             label4 = new Label();
             tbOptions = new TextBox();
             label3 = new Label();
-            nUDQuantity = new NumericUpDown();
-            label2 = new Label();
             label1 = new Label();
             tbDesc = new TextBox();
             panel1 = new Panel();
+            label6 = new Label();
             cLBDelete = new CheckedListBox();
             label5 = new Label();
             btnDelete_Survey = new Button();
-            label6 = new Label();
             AdminPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)nUDQuantity).BeginInit();
             panel1.SuspendLayout();
             SuspendLayout();
             // 
@@ -56,7 +53,7 @@
             btnCreateSurvey.FlatStyle = FlatStyle.Flat;
             btnCreateSurvey.Font = new Font("Trebuchet MS", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
             btnCreateSurvey.ForeColor = SystemColors.ButtonFace;
-            btnCreateSurvey.Location = new Point(224, 592);
+            btnCreateSurvey.Location = new Point(207, 550);
             btnCreateSurvey.Name = "btnCreateSurvey";
             btnCreateSurvey.Size = new Size(260, 63);
             btnCreateSurvey.TabIndex = 0;
@@ -71,8 +68,6 @@
             AdminPanel.Controls.Add(label4);
             AdminPanel.Controls.Add(tbOptions);
             AdminPanel.Controls.Add(label3);
-            AdminPanel.Controls.Add(nUDQuantity);
-            AdminPanel.Controls.Add(label2);
             AdminPanel.Controls.Add(label1);
             AdminPanel.Controls.Add(tbDesc);
             AdminPanel.Location = new Point(28, 27);
@@ -105,7 +100,7 @@
             // 
             tbOptions.BackColor = Color.Black;
             tbOptions.ForeColor = Color.Green;
-            tbOptions.Location = new Point(13, 243);
+            tbOptions.Location = new Point(13, 202);
             tbOptions.Multiline = true;
             tbOptions.Name = "tbOptions";
             tbOptions.ScrollBars = ScrollBars.Both;
@@ -118,32 +113,11 @@
             label3.BackColor = Color.FromArgb(64, 0, 64);
             label3.Font = new Font("Trebuchet MS", 20F);
             label3.ForeColor = Color.Snow;
-            label3.Location = new Point(13, 205);
+            label3.Location = new Point(13, 164);
             label3.Name = "label3";
-            label3.Size = new Size(187, 35);
+            label3.Size = new Size(548, 35);
             label3.TabIndex = 4;
-            label3.Text = "Enter options:";
-            // 
-            // nUDQuantity
-            // 
-            nUDQuantity.BackColor = Color.Black;
-            nUDQuantity.ForeColor = Color.Green;
-            nUDQuantity.Location = new Point(324, 164);
-            nUDQuantity.Name = "nUDQuantity";
-            nUDQuantity.Size = new Size(120, 32);
-            nUDQuantity.TabIndex = 3;
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.BackColor = Color.FromArgb(64, 0, 64);
-            label2.Font = new Font("Trebuchet MS", 20F);
-            label2.ForeColor = Color.Snow;
-            label2.Location = new Point(13, 158);
-            label2.Name = "label2";
-            label2.Size = new Size(316, 35);
-            label2.TabIndex = 2;
-            label2.Text = "Choose options quantity:";
+            label3.Text = "Enter options(press \"Enter\" for new option):";
             // 
             // label1
             // 
@@ -176,6 +150,18 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(428, 670);
             panel1.TabIndex = 2;
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.BackColor = Color.FromArgb(64, 0, 64);
+            label6.Font = new Font("Trebuchet MS", 20.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label6.ForeColor = Color.Red;
+            label6.Location = new Point(113, 19);
+            label6.Name = "label6";
+            label6.Size = new Size(195, 35);
+            label6.TabIndex = 9;
+            label6.Text = "DOESN'T WORK";
             // 
             // cLBDelete
             // 
@@ -214,18 +200,6 @@
             btnDelete_Survey.UseVisualStyleBackColor = true;
             btnDelete_Survey.Click += btnDelete_Survey_Click;
             // 
-            // label6
-            // 
-            label6.AutoSize = true;
-            label6.BackColor = Color.FromArgb(64, 0, 64);
-            label6.Font = new Font("Trebuchet MS", 20.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label6.ForeColor = Color.Red;
-            label6.Location = new Point(113, 19);
-            label6.Name = "label6";
-            label6.Size = new Size(195, 35);
-            label6.TabIndex = 9;
-            label6.Text = "DOESN'T WORK";
-            // 
             // AdminGUI
             // 
             AutoScaleDimensions = new SizeF(11F, 25F);
@@ -242,7 +216,6 @@
             Text = "Voter (Admin)";
             AdminPanel.ResumeLayout(false);
             AdminPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)nUDQuantity).EndInit();
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             ResumeLayout(false);
@@ -254,10 +227,8 @@
         private Panel AdminPanel;
         private TextBox tbDesc;
         private Label label1;
-        private Label label2;
         private TextBox tbOptions;
         private Label label3;
-        private NumericUpDown nUDQuantity;
         private TextBox tbTopic;
         private Label label4;
         private Panel panel1;

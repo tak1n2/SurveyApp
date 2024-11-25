@@ -20,12 +20,12 @@ namespace SurveyApp
         {
             InitializeComponent();
             tcpClient = client;
-        }       
+        }
 
         private async void btnCreateSurvey_Click(object sender, EventArgs e)
         {
             var topic = tbTopic.Text.Trim();
-            var description = tbDesc.Text.Trim(); 
+            var description = tbDesc.Text.Trim();
             var options = tbOptions.Text.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
 
             if (string.IsNullOrWhiteSpace(topic) || string.IsNullOrWhiteSpace(description) || options.Length == 0)
@@ -49,6 +49,11 @@ namespace SurveyApp
             var surveyToDelete = cLBDelete.SelectedItem.ToString();
             var deleteCommand = $"DELETE {surveyToDelete}";
             await tcpClient.SendMessageAsync(deleteCommand);
+        }
+
+        private void nUDQuantity_ValueChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

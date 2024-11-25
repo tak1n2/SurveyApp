@@ -18,6 +18,8 @@ namespace SurveyApp
         private DataGridView dgvResults;
         private int currentPage = 0;
         private const int SurveysPerPage = 4;
+        private readonly HashSet<string> votedSurveys = new HashSet<string>();
+        private string optionText;
         public App(Client client)
         {
             InitializeComponent();
@@ -157,8 +159,9 @@ namespace SurveyApp
                 Location = new Point(35, optionY + 10) 
             };
 
+            voteButton.Enabled = !votedSurveys.Contains(surveyId);
 
-            var dgvSurveyResults = new DataGridView
+            dgvResults = new DataGridView
             {
                 Name = $"dgv_{surveyId}",
                 Size = new Size(surveyPanel.Width - 40, 100),
@@ -168,10 +171,10 @@ namespace SurveyApp
                 ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
             };
 
-            dgvSurveyResults.Columns.Add("Option", "Option");
-            dgvSurveyResults.Columns.Add("Votes", "Votes");
+            dgvResults.Columns.Add("Option", "Option");
+            dgvResults.Columns.Add("Votes", "Votes");
 
-            surveyPanel.Controls.Add(dgvSurveyResults);
+            surveyPanel.Controls.Add(dgvResults);
 
             voteButton.Click += async (sender, e) =>
             {
@@ -183,14 +186,17 @@ namespace SurveyApp
                     {
                         var surveyId = surveyPanel.Tag.ToString();
                         int colonIndex = selectedOption.Text.IndexOf(':');
-                        string optionText = selectedOption.Text.Substring(colonIndex + 1).Trim();
+                        optionText = selectedOption.Text.Substring(colonIndex + 1).Trim();
 
                         var voteMessage = $"VOTE {surveyId} \"{optionText}\"";
                         await tcpClient.SendMessageAsync(voteMessage);
 
                         MessageBox.Show($"You voted for: {selectedOption.Text}", "Vote Submitted",
                                         MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        UpdateSurveyResultsGrid(dgvSurveyResults, optionText);
+
+                        votedSurveys.Add(surveyId);
+                        SaveVotedSurveys();
+                        UpdateSurveyResultsGrid(dgvResults, optionText);
                         voteButton.Enabled = false;
                     }
                     catch (Exception ex)
@@ -288,25 +294,33 @@ namespace SurveyApp
                 DisplayCurrentPage();
             }
         }
+
+        private void SaveVotedSurveys()
+        {
+            System.IO.File.WriteAllText("votedSurveys.json", Newtonsoft.Json.JsonConvert.SerializeObject(votedSurveys));
+        }
+
+        private void LoadVotedSurveys()
+        {
+            if (System.IO.File.Exists("votedSurveys.json"))
+            {
+                votedSurveys.Clear();
+                var savedSurveys = Newtonsoft.Json.JsonConvert.DeserializeObject<HashSet<string>>(System.IO.File.ReadAllText("votedSurveys.json"));
+                if (savedSurveys != null)
+                {
+                    foreach (var survey in savedSurveys)
+                    {
+                        votedSurveys.Add(survey);
+                    }
+                }
+            }
+        }
+
+
         private async Task SendSurveyRequest()
         {
             var msg = $"GET_SURVEYS";
             await tcpClient.SendMessageAsync(msg);
-        }
-         private async void btnRefresh_Click(object sender, EventArgs e)
-        {
-            surveys.Clear();
-            panelSurveyList.Controls.Clear();
-            currentPage = 0;
-            try
-            {
-                await SendSurveyRequest();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error while refreshing surveys: {ex.Message}", "Error",
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
         }
     }
 }

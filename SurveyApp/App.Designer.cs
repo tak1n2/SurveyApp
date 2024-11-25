@@ -33,7 +33,6 @@
             lLNext = new LinkLabel();
             lLPrev = new LinkLabel();
             panelSurveyList = new Panel();
-            btnRefresh = new Button();
             SuspendLayout();
             // 
             // label1
@@ -80,20 +79,6 @@
             panelSurveyList.Size = new Size(1065, 500);
             panelSurveyList.TabIndex = 3;
             // 
-            // btnRefresh
-            // 
-            btnRefresh.BackColor = SystemColors.ActiveCaptionText;
-            btnRefresh.Cursor = Cursors.Hand;
-            btnRefresh.Font = new Font("Trebuchet MS", 10F);
-            btnRefresh.ForeColor = SystemColors.ButtonHighlight;
-            btnRefresh.Location = new Point(1142, 10);
-            btnRefresh.Name = "btnRefresh";
-            btnRefresh.Size = new Size(110, 75);
-            btnRefresh.TabIndex = 4;
-            btnRefresh.Text = "Refresh";
-            btnRefresh.UseVisualStyleBackColor = false;
-            btnRefresh.Click += btnRefresh_Click;
-            // 
             // App
             // 
             AutoScaleDimensions = new SizeF(11F, 25F);
@@ -101,7 +86,6 @@
             BackColor = SystemColors.ControlDarkDark;
             BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(1264, 681);
-            Controls.Add(btnRefresh);
             Controls.Add(panelSurveyList);
             Controls.Add(lLPrev);
             Controls.Add(lLNext);
@@ -125,6 +109,5 @@
         private LinkLabel lLNext;
         private LinkLabel lLPrev;
         private Panel panelSurveyList;
-        private Button btnRefresh;
     }
 }
