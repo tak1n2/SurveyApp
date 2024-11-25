@@ -15,6 +15,7 @@ namespace SurveyApp
     {
         private readonly Client tcpClient;
         public readonly List<Panel> surveys = new List<Panel>();
+        private DataGridView dgvResults;
         private int currentPage = 0;
         private const int SurveysPerPage = 4;
         public App(Client client)
@@ -37,24 +38,48 @@ namespace SurveyApp
                         break;
                     }
 
-                    
+
                     var messages = message.Split(new[] { "\n" }, StringSplitOptions.None);
 
                     foreach (var msg in messages)
                     {
                         if (msg.StartsWith("NEW_SURVEY"))
                         {
-                            AddSurveyToGui(msg.Substring(11));  
-                                                                  
+                            AddSurveyToGui(msg.Substring(11));
+
                         }
                         else if (msg.StartsWith("DELETE_SURVEY"))
                         {
-                            RemoveSurveyFromGui(msg.Substring(14));  
-                                                                   
-                            
+                            RemoveSurveyFromGui(msg.Substring(14));
                         }
-                    }
+                        else if (msg.StartsWith("UPDATE_RESULTS"))
+                        {
+                            var parts = msg.Substring(15).Split('|'); 
+                            foreach (var part in parts)
+                            {
+                                var data = part.Split(';');
+                                if (data.Length == 3)
+                                {
+                                    string surveyId = data[0];
+                                    string option = data[1];
+
+                                    var surveyPanel = surveys.FirstOrDefault(s => s.Name == surveyId);
+                                    if (surveyPanel != null)
+                                    {
+                                        var dgv = surveyPanel.Controls
+                                                             .OfType<DataGridView>()
+                                                             .FirstOrDefault();
+                                        if (dgv != null)
+                                        {
+                                            UpdateSurveyResultsGrid(dgv, option);
+                                        }
+                                    }
+
+                                }
+                            }
+                     }
                 }
+             }
                 catch (Exception ex)
                 {
                     Console.WriteLine($"Error in ListenForServerMessages: {ex.Message}");
@@ -109,15 +134,12 @@ namespace SurveyApp
                 Font = new Font("Trebuchet MS", 14)
             });
 
+
             int optionY = 70;
             int n = 1;
             for (int i = 0; i < options.Length; i++)
             {
                 var option = options[i];
-                //if (option.Contains("GET_CONFIRMED"))
-                //{
-                //    options[i] = option.Replace("GET_CONFIRMED", string.Empty);
-                //}
                 surveyPanel.Controls.Add(new RadioButton
                 {
                     Text = $"Option {n}: {options[i]}",
@@ -135,6 +157,22 @@ namespace SurveyApp
                 Location = new Point(35, optionY + 10) 
             };
 
+
+            var dgvSurveyResults = new DataGridView
+            {
+                Name = $"dgv_{surveyId}",
+                Size = new Size(surveyPanel.Width - 40, 100),
+                Location = new Point(10, optionY + 50),
+                AllowUserToAddRows = false,
+                ReadOnly = true,
+                ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
+            };
+
+            dgvSurveyResults.Columns.Add("Option", "Option");
+            dgvSurveyResults.Columns.Add("Votes", "Votes");
+
+            surveyPanel.Controls.Add(dgvSurveyResults);
+
             voteButton.Click += async (sender, e) =>
             {
                 var selectedOption = surveyPanel.Controls.OfType<RadioButton>()
@@ -145,21 +183,24 @@ namespace SurveyApp
                     try
                     {
                         var surveyId = surveyPanel.Tag.ToString();
-                        int colonIndex = selectedOption.Text.IndexOf(':');  // Находим индекс двоеточия
-                        string OptionText = selectedOption.Text.Substring(colonIndex + 1);
-                        
-                            var voteMessage = $"VOTE {surveyId} \"{OptionText}\"";
+                        int colonIndex = selectedOption.Text.IndexOf(':');
+                        string optionText = selectedOption.Text.Substring(colonIndex + 1).Trim();
+
+                        var voteMessage = $"VOTE {surveyId} \"{optionText}\"";
 
                         await tcpClient.SendMessageAsync(voteMessage);
 
                         MessageBox.Show($"You voted for: {selectedOption.Text}", "Vote Submitted",
-                                MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        UpdateSurveyResultsGrid(dgvSurveyResults, optionText);
+                        voteButton.Enabled = false; 
                     }
-                    catch(Exception ex) {
+                    catch (Exception ex)
+                    {
                         MessageBox.Show($"Failed to send vote: {ex.Message}", "Error",
-                             MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
-                    
                 }
                 else
                 {
@@ -171,6 +212,25 @@ namespace SurveyApp
             surveys.Add(surveyPanel);
             DisplayCurrentPage();
         }
+
+        private void UpdateSurveyResultsGrid(DataGridView dgv, string option)
+        {
+            var existingRow = dgv.Rows.Cast<DataGridViewRow>()
+                              .FirstOrDefault(row => row.Cells["Option"].Value?.ToString() == option);
+
+            if (existingRow != null)
+            {
+
+                int currentVotes = int.Parse(existingRow.Cells["Votes"].Value.ToString());
+                existingRow.Cells["Votes"].Value = currentVotes + 1;
+            }
+            else
+            {
+                dgv.Rows.Add(option, 1);
+            }
+        }
+        
+
         private void RemoveSurveyFromGui(string surveyId)
         {
             var surveyPanel = surveys.FirstOrDefault(s => s.Name == surveyId);
@@ -204,7 +264,7 @@ namespace SurveyApp
 
             try
             {
-                await SendSurveyRequest(); 
+                await SendSurveyRequest();
                 DisplayCurrentPage(); 
             }
             catch (Exception ex)

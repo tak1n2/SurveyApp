@@ -42,7 +42,7 @@
             label1.Font = new Font("Trebuchet MS", 36F, FontStyle.Regular, GraphicsUnit.Point, 0);
             label1.Location = new Point(438, 18);
             label1.Name = "label1";
-            label1.Size = new Size(501, 76);
+            label1.Size = new Size(402, 61);
             label1.TabIndex = 0;
             label1.Text = "SURVEYS BROWSE";
             // 
@@ -53,7 +53,7 @@
             lLNext.LinkColor = Color.Red;
             lLNext.Location = new Point(1077, 625);
             lLNext.Name = "lLNext";
-            lLNext.Size = new Size(221, 46);
+            lLNext.Size = new Size(175, 37);
             lLNext.TabIndex = 1;
             lLNext.TabStop = true;
             lLNext.Text = "Next page ->";
@@ -66,7 +66,7 @@
             lLPrev.LinkColor = Color.Red;
             lLPrev.Location = new Point(12, 635);
             lLPrev.Name = "lLPrev";
-            lLPrev.Size = new Size(276, 46);
+            lLPrev.Size = new Size(220, 37);
             lLPrev.TabIndex = 2;
             lLPrev.TabStop = true;
             lLPrev.Text = "<- Previous page";
@@ -82,19 +82,21 @@
             // 
             // btnRefresh
             // 
+            btnRefresh.BackColor = SystemColors.ActiveCaptionText;
             btnRefresh.Cursor = Cursors.Hand;
             btnRefresh.Font = new Font("Trebuchet MS", 10F);
-            btnRefresh.Location = new Point(637, 625);
+            btnRefresh.ForeColor = SystemColors.ButtonHighlight;
+            btnRefresh.Location = new Point(1142, 10);
             btnRefresh.Name = "btnRefresh";
-            btnRefresh.Size = new Size(105, 44);
+            btnRefresh.Size = new Size(110, 75);
             btnRefresh.TabIndex = 4;
             btnRefresh.Text = "Refresh";
-            btnRefresh.UseVisualStyleBackColor = true;
+            btnRefresh.UseVisualStyleBackColor = false;
             btnRefresh.Click += btnRefresh_Click;
             // 
             // App
             // 
-            AutoScaleDimensions = new SizeF(13F, 31F);
+            AutoScaleDimensions = new SizeF(11F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ControlDarkDark;
             BackgroundImageLayout = ImageLayout.Stretch;

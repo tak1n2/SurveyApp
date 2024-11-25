@@ -40,7 +40,6 @@
             label1 = new Label();
             tbDesc = new TextBox();
             panel1 = new Panel();
-            ButtonRefresh = new Button();
             cLBDelete = new CheckedListBox();
             label5 = new Label();
             btnDelete_Survey = new Button();
@@ -86,7 +85,7 @@
             tbTopic.ForeColor = Color.Green;
             tbTopic.Location = new Point(271, 24);
             tbTopic.Name = "tbTopic";
-            tbTopic.Size = new Size(432, 39);
+            tbTopic.Size = new Size(432, 32);
             tbTopic.TabIndex = 7;
             // 
             // label4
@@ -97,7 +96,7 @@
             label4.ForeColor = Color.Snow;
             label4.Location = new Point(13, 19);
             label4.Name = "label4";
-            label4.Size = new Size(309, 43);
+            label4.Size = new Size(247, 35);
             label4.TabIndex = 6;
             label4.Text = "Enter voter's topic:";
             // 
@@ -120,7 +119,7 @@
             label3.ForeColor = Color.Snow;
             label3.Location = new Point(13, 205);
             label3.Name = "label3";
-            label3.Size = new Size(234, 43);
+            label3.Size = new Size(187, 35);
             label3.TabIndex = 4;
             label3.Text = "Enter options:";
             // 
@@ -130,7 +129,7 @@
             nUDQuantity.ForeColor = Color.Green;
             nUDQuantity.Location = new Point(325, 164);
             nUDQuantity.Name = "nUDQuantity";
-            nUDQuantity.Size = new Size(120, 39);
+            nUDQuantity.Size = new Size(120, 32);
             nUDQuantity.TabIndex = 3;
             // 
             // label2
@@ -141,7 +140,7 @@
             label2.ForeColor = Color.Snow;
             label2.Location = new Point(13, 158);
             label2.Name = "label2";
-            label2.Size = new Size(398, 43);
+            label2.Size = new Size(316, 35);
             label2.TabIndex = 2;
             label2.Text = "Choose options quantity:";
             // 
@@ -153,7 +152,7 @@
             label1.ForeColor = Color.Snow;
             label1.Location = new Point(13, 63);
             label1.Name = "label1";
-            label1.Size = new Size(301, 43);
+            label1.Size = new Size(239, 35);
             label1.TabIndex = 1;
             label1.Text = "Enter survey desc:";
             // 
@@ -163,12 +162,11 @@
             tbDesc.ForeColor = Color.Green;
             tbDesc.Location = new Point(13, 112);
             tbDesc.Name = "tbDesc";
-            tbDesc.Size = new Size(690, 39);
+            tbDesc.Size = new Size(690, 32);
             tbDesc.TabIndex = 0;
             // 
             // panel1
             // 
-            panel1.Controls.Add(ButtonRefresh);
             panel1.Controls.Add(cLBDelete);
             panel1.Controls.Add(label5);
             panel1.Controls.Add(btnDelete_Survey);
@@ -177,16 +175,6 @@
             panel1.Size = new Size(428, 670);
             panel1.TabIndex = 2;
             // 
-            // ButtonRefresh
-            // 
-            ButtonRefresh.Location = new Point(4, 227);
-            ButtonRefresh.Name = "ButtonRefresh";
-            ButtonRefresh.Size = new Size(51, 39);
-            ButtonRefresh.TabIndex = 9;
-            ButtonRefresh.Text = "Refresh";
-            ButtonRefresh.UseVisualStyleBackColor = true;
-            ButtonRefresh.Click += button_Refresh_Click;
-            // 
             // cLBDelete
             // 
             cLBDelete.BackColor = SystemColors.InactiveCaptionText;
@@ -194,7 +182,7 @@
             cLBDelete.FormattingEnabled = true;
             cLBDelete.Location = new Point(61, 73);
             cLBDelete.Name = "cLBDelete";
-            cLBDelete.Size = new Size(312, 480);
+            cLBDelete.Size = new Size(312, 463);
             cLBDelete.TabIndex = 8;
             // 
             // label5
@@ -205,7 +193,7 @@
             label5.ForeColor = Color.Snow;
             label5.Location = new Point(22, 19);
             label5.Name = "label5";
-            label5.Size = new Size(483, 43);
+            label5.Size = new Size(384, 35);
             label5.TabIndex = 7;
             label5.Text = "Choose what survey to delete:";
             // 
@@ -226,7 +214,7 @@
             // 
             // AdminGUI
             // 
-            AutoScaleDimensions = new SizeF(13F, 31F);
+            AutoScaleDimensions = new SizeF(11F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(64, 0, 64);
             ClientSize = new Size(1251, 709);
@@ -263,6 +251,5 @@
         private Button btnDelete_Survey;
         private Label label5;
         private CheckedListBox cLBDelete;
-        private Button ButtonRefresh;
     }
 }
